@@ -11,7 +11,8 @@
 		Insertion:
 			'Sorts by building a final sorted array one item at a time, inserting it into place.',
 		Merge: 'Sorts by recursively dividing the list, sorting the halves, and merging them back.',
-		Distribution: 'Sorts by distributing elements into buckets based on their values.'
+		Distribution: 'Sorts by distributing elements into buckets based on their values.',
+		'Brute Force': 'Sorts by generating and testing possibilities until a solution is found.'
 	};
 </script>
 

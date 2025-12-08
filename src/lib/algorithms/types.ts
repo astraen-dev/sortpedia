@@ -1,7 +1,7 @@
 export interface AlgorithmInfo {
 	id: string;
 	name: string;
-	category: 'Exchange' | 'Selection' | 'Insertion' | 'Merge' | 'Distribution';
+	category: 'Exchange' | 'Selection' | 'Insertion' | 'Merge' | 'Distribution' | 'Brute Force';
 	complexity: {
 		best: string;
 		average: string;
@@ -20,7 +20,7 @@ export interface AlgorithmInfo {
 	};
 }
 
-export type SortEventType = 'compare' | 'swap' | 'write' | 'sorted';
+export type SortEventType = 'compare' | 'swap' | 'write' | 'sorted' | 'shuffle';
 
 export interface SortEvent {
 	type: SortEventType;

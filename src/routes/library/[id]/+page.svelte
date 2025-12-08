@@ -12,7 +12,10 @@
 
 	let algoId = $derived(page.params.id ?? '');
 	let algorithm = $derived(getAlgorithm(algoId));
-	const demoEngine = new VisualizerEngine(20);
+
+	// Bogo Sort is only practical for tiny arrays. Set a specific size for it.
+	const DEMO_SIZE = $derived(algorithm?.id === 'bogo-sort' ? 5 : 20);
+	const demoEngine = new VisualizerEngine(0);
 
 	const categoryExplanations = {
 		Exchange:
@@ -21,17 +24,18 @@
 		Insertion:
 			'Sorts by building a final sorted array one item at a time, inserting it into place.',
 		Merge: 'Sorts by recursively dividing the list, sorting the halves, and merging them back.',
-		Distribution: 'Sorts by distributing elements into buckets based on their values.'
+		Distribution: 'Sorts by distributing elements into buckets based on their values.',
+		'Brute Force': 'Sorts by generating and testing possibilities until a solution is found.'
 	};
 
-	// Reset demo when algorithm changes
+	// Reset demo when algorithm or size changes
 	$effect(() => {
 		if (algorithm) {
 			// Wrap internal state reads in untrack() to prevent infinite loops.
 			// This tells Svelte: "Execute this, but don't track any state read inside as a dependency."
 			untrack(() => {
 				demoEngine.resetPlayback();
-				demoEngine.generateArray(20);
+				demoEngine.generateArray(DEMO_SIZE);
 			});
 		}
 	});
@@ -263,7 +267,7 @@
 					<div class="bg-surface-50 border-surface-200 overflow-hidden rounded-xl border shadow-sm">
 						<div class="border-surface-200 border-b bg-white p-4">
 							<h3 class="font-bold">Live Demo</h3>
-							<p class="text-xs text-gray-500">20 elements • 6x Speed</p>
+							<p class="text-xs text-gray-500">{DEMO_SIZE} elements • 6x Speed</p>
 						</div>
 
 						<div class="bg-surface-100 h-48 p-4">
@@ -297,7 +301,7 @@
 									Start
 								</button>
 								<button
-									onclick={() => demoEngine.generateArray(20)}
+									onclick={() => demoEngine.generateArray(DEMO_SIZE)}
 									class="bg-surface-200 hover:bg-surface-300 flex items-center justify-center gap-2 rounded-md py-2 px-3 text-sm font-medium transition-colors active:scale-95"
 									aria-label="Shuffle"
 								>

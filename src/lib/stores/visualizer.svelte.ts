@@ -24,12 +24,17 @@ export class VisualizerEngine {
 
 	// Derived state for the text label
 	get currentStepLabel(): string {
-		if (this.stepIndex >= this.trace.length && this.trace.length > 0) return 'Sorted!';
+		// When the trace is finished, check the final state of the array.
+		if (this.stepIndex >= this.trace.length && this.trace.length > 0) {
+			// Use an internal check to see if the array is actually sorted.
+			const isActuallySorted = this._isSortedCheck();
+			return isActuallySorted ? 'Sorted!' : 'Failed to sort (max attempts reached)';
+		}
 		if (this.trace.length === 0 || this.stepIndex === 0) return 'Ready to sort';
 
 		// We display the description of the *last executed* step or the *current active* step
 		// depending on whether we are moving. Here we show what just happened/is happening.
-		const event = this.trace[this.stepIndex - 1]; // -1 because stepIndex points to next
+		const event = this.stepIndex > 0 ? this.trace[this.stepIndex - 1] : this.trace[0];
 		if (!event) return 'Starting...';
 
 		const [i, j] = event.indices;
@@ -42,6 +47,8 @@ export class VisualizerEngine {
 				return `Overwriting index ${i} with value ${event.value}`;
 			case 'sorted':
 				return `Marked index ${i} as sorted`;
+			case 'shuffle':
+				return `Randomly shuffling all elements`;
 			default:
 				return 'Processing...';
 		}
@@ -200,6 +207,19 @@ export class VisualizerEngine {
 		this.stepIndex++;
 	}
 
+	/**
+	 * Internal helper to check if the current array is sorted.
+	 * Does not yield events, for internal use only.
+	 */
+	private _isSortedCheck(): boolean {
+		for (let i = 0; i < this.array.length - 1; i++) {
+			if (this.array[i] > this.array[i + 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private applyEventVisuals(event: SortEvent) {
 		this.activeIndices = event.indices;
 		this.eventType = event.type;
@@ -228,6 +248,8 @@ export class VisualizerEngine {
 					return 'bg-vis-write'; // Blue
 				case 'sorted':
 					return 'bg-vis-sorted'; // Green
+				case 'shuffle':
+					return 'bg-vis-accent'; // Purple
 			}
 		}
 		if (this.sortedIndices.has(index)) return 'bg-vis-sorted';
