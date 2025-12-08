@@ -29,8 +29,8 @@ export const algorithms: AlgorithmInfo[] = [
 		category: 'Exchange',
 		complexity: {
 			best: 'O(n)',
-			average: 'O(n²)',
-			worst: 'O(n²)',
+			average: 'O(n^2)',
+			worst: 'O(n^2)',
 			space: 'O(1)'
 		},
 		stable: true,
@@ -48,7 +48,12 @@ export const algorithms: AlgorithmInfo[] = [
 		id: 'quick-sort',
 		name: 'Quick Sort',
 		category: 'Exchange',
-		complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n²)', space: 'O(log n)' },
+		complexity: {
+			best: 'O(n \\log n)',
+			average: 'O(n \\log n)',
+			worst: 'O(n^2)',
+			space: 'O(\\log n)'
+		},
 		stable: false,
 		description:
 			'An efficient, divide-and-conquer algorithm that works by selecting a "pivot" element and partitioning the other elements into two sub-arrays.',
@@ -64,7 +69,12 @@ export const algorithms: AlgorithmInfo[] = [
 		id: 'merge-sort',
 		name: 'Merge Sort',
 		category: 'Merge',
-		complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)', space: 'O(n)' },
+		complexity: {
+			best: 'O(n \\log n)',
+			average: 'O(n \\log n)',
+			worst: 'O(n \\log n)',
+			space: 'O(n)'
+		},
 		stable: true,
 		description:
 			'A divide and conquer algorithm that produces a stable sort. It divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.',
@@ -80,7 +90,7 @@ export const algorithms: AlgorithmInfo[] = [
 		id: 'insertion-sort',
 		name: 'Insertion Sort',
 		category: 'Insertion',
-		complexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+		complexity: { best: 'O(n)', average: 'O(n^2)', worst: 'O(n^2)', space: 'O(1)' },
 		stable: true,
 		description:
 			'Builds the final sorted array (or list) one item at a time. It is much less efficient on large lists than more advanced algorithms.',

@@ -2,6 +2,7 @@
 	import { algorithms } from '$lib/data/algorithms';
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
+	import Latex from '$lib/components/Latex.svelte';
 </script>
 
 <div class="flex flex-col gap-8">
@@ -21,8 +22,10 @@
 						<h2 class="group-hover:text-primary text-xl font-bold transition-colors">
 							{algo.name}
 						</h2>
-						<span class="bg-surface-200 text-surface-900 rounded-full px-2 py-1 text-xs font-mono">
-							{algo.complexity.average}
+						<span
+							class="bg-surface-200 text-surface-900 flex items-center rounded-full px-2 py-1 text-xs font-mono"
+						>
+							<Latex src={algo.complexity.average} />
 						</span>
 					</div>
 

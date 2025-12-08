@@ -5,6 +5,9 @@
 	import { VisualizerEngine } from '$lib/stores/visualizer.svelte';
 	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';
 	import { untrack } from 'svelte';
+	import Latex from '$lib/components/Latex.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import TextWithLatex from '$lib/components/TextWithLatex.svelte';
 
 	let algoId = $derived(page.params.id ?? '');
 	let algorithm = $derived(getAlgorithm(algoId));
@@ -95,7 +98,7 @@
 						{#each algorithm.details.steps as step (step)}
 							<li class="flex gap-4">
 								<div class="bg-surface-200 mt-1.5 h-2 w-2 flex-shrink-0 rounded-full"></div>
-								<p class="text-surface-800 leading-relaxed">{step}</p>
+								<p class="text-surface-800 leading-relaxed"><TextWithLatex text={step} /></p>
 							</li>
 						{/each}
 					</ul>
@@ -110,13 +113,13 @@
 								Best Case
 							</dt>
 							<dd class="mt-1 font-mono text-lg font-bold text-green-600">
-								{algorithm.complexity.best}
+								<Latex src={algorithm.complexity.best} />
 							</dd>
 						</div>
 						<div class="border-surface-100 rounded-lg border bg-white p-4 shadow-sm">
 							<dt class="text-xs font-semibold tracking-wider text-gray-500 uppercase">Average</dt>
 							<dd class="mt-1 font-mono text-lg font-bold text-yellow-600">
-								{algorithm.complexity.average}
+								<Latex src={algorithm.complexity.average} />
 							</dd>
 						</div>
 						<div class="border-surface-100 rounded-lg border bg-white p-4 shadow-sm">
@@ -124,13 +127,13 @@
 								Worst Case
 							</dt>
 							<dd class="mt-1 font-mono text-lg font-bold text-red-600">
-								{algorithm.complexity.worst}
+								<Latex src={algorithm.complexity.worst} />
 							</dd>
 						</div>
 						<div class="border-surface-100 rounded-lg border bg-white p-4 shadow-sm">
 							<dt class="text-xs font-semibold tracking-wider text-gray-500 uppercase">Space</dt>
 							<dd class="text-primary mt-1 font-mono text-lg font-bold">
-								{algorithm.complexity.space}
+								<Latex src={algorithm.complexity.space} />
 							</dd>
 						</div>
 					</div>
@@ -192,17 +195,11 @@
 				<!-- Implementation -->
 				<section>
 					<h2 class="text-surface-900 mb-4 text-2xl font-bold">Implementation</h2>
-					<div class="overflow-hidden rounded-lg bg-[#1e1e1e] shadow-lg">
-						<div
-							class="flex items-center justify-between bg-[#2d2d2d] px-4 py-2 text-xs text-gray-400"
-						>
-							<span>JavaScript</span>
-							<span>bubbleSort.js</span>
-						</div>
-						<pre class="overflow-x-auto p-4 text-sm leading-6 text-gray-300"><code
-								>{algorithm.details.pseudocode}</code
-							></pre>
-					</div>
+					<CodeBlock
+						code={algorithm.details.pseudocode}
+						language="JavaScript"
+						filename={`${algorithm.id}.js`}
+					/>
 				</section>
 			</div>
 
