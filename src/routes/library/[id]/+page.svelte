@@ -68,7 +68,7 @@
 						{algorithm.name}
 					</h1>
 					<p class="text-surface-800 mt-4 text-xl leading-relaxed">
-						{algorithm.details.summary}
+						<TextWithLatex text={algorithm.details.summary} />
 					</p>
 				</div>
 				<div class="flex flex-wrap gap-2 md:justify-end">
@@ -159,7 +159,9 @@
 						</h3>
 						<ul class="text-surface-800 space-y-3 text-sm">
 							{#each algorithm.details.advantages as item (item)}
-								<li class="border-green-200 border-l-2 pl-2">{item}</li>
+								<li class="border-green-200 border-l-2 pl-2">
+									<TextWithLatex text={item} />
+								</li>
 							{/each}
 						</ul>
 					</div>
@@ -186,7 +188,9 @@
 						</h3>
 						<ul class="text-surface-800 space-y-3 text-sm">
 							{#each algorithm.details.disadvantages as item (item)}
-								<li class="border-red-200 border-l-2 pl-2">{item}</li>
+								<li class="border-red-200 border-l-2 pl-2">
+									<TextWithLatex text={item} />
+								</li>
 							{/each}
 						</ul>
 					</div>
@@ -245,13 +249,16 @@
 						</div>
 					</div>
 
-					{#if algorithm.details.funFacts}
+					{#if algorithm.details.funFacts && algorithm.details.funFacts.length > 0}
 						<div class="bg-primary/5 border-primary/10 rounded-xl border p-6">
-							<h4 class="text-primary mb-2 font-bold">Did you know?</h4>
-							<p class="text-surface-800 text-sm">
-								<!-- eslint-disable-next-line svelte/no-at-html-tags-->
-								{@html algorithm.details.funFacts}
-							</p>
+							<h4 class="text-primary mb-3 font-bold">Did you know?</h4>
+							<ul class="text-surface-800 list-inside list-disc space-y-2 text-sm">
+								{#each algorithm.details.funFacts as fact (fact)}
+									<li>
+										<TextWithLatex text={fact} />
+									</li>
+								{/each}
+							</ul>
 						</div>
 					{/if}
 				</div>
