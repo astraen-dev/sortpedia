@@ -1,32 +1,34 @@
 <script lang="ts">
 	import { algorithms } from '$lib/data/algorithms';
+	import { visualizer } from '$lib/stores/visualizer.svelte';
+	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';
+	import { onMount } from 'svelte';
 
+	// Bind controls to store
 	let selectedAlgo = $state(algorithms[0].id);
-	let arraySize = $state(50);
-	let speed = $state(5);
+
+	// Effects to sync inputs with store
+	const handleSizeChange = (e: Event) => {
+		const size = +(e.target as HTMLInputElement).value;
+		visualizer.generateArray(size);
+	};
+
+	const handleSort = () => {
+		visualizer.runAlgorithm(selectedAlgo);
+	};
+
+	onMount(() => {
+		// Ensure initial array exists
+		if (visualizer.array.length === 0) visualizer.generateArray(50);
+	});
 </script>
 
 <div class="grid min-h-[600px] grid-cols-1 gap-6 lg:grid-cols-4">
 	<!-- Canvas Area -->
 	<div
-		class="bg-surface-100 border-surface-200 relative flex flex-col items-center justify-center rounded-xl border shadow-inner lg:col-span-3 min-h-[400px]"
+		class="bg-surface-100 border-surface-200 relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden rounded-xl border p-8 shadow-inner lg:col-span-3"
 	>
-		<div class="z-10 text-center px-4">
-			<p class="text-surface-800 text-lg font-medium">Visualization Canvas Placeholder</p>
-			<p class="text-surface-800/60 mt-2 text-sm">
-				Bars will render here based on event stream via Web Worker.
-			</p>
-		</div>
-
-		<!-- Simulated Bar Container -->
-		<div class="absolute bottom-8 left-8 right-8 flex h-2/3 items-end gap-0.5 opacity-50">
-			{#each Array.from({ length: 30 }, (_, k) => k) as i (i)}
-				<div
-					class="bg-vis-idle w-full rounded-t-sm"
-					style="height: {10 + Math.random() * 90}%"
-				></div>
-			{/each}
-		</div>
+		<VisualizerDisplay engine={visualizer} showStats={true} />
 	</div>
 
 	<!-- Controls Panel -->
@@ -38,6 +40,7 @@
 			<select
 				id="algo-select"
 				bind:value={selectedAlgo}
+				onchange={() => visualizer.resetPlayback()}
 				class="border-surface-200 bg-surface-50 focus:border-primary focus:ring-primary/20 rounded-md border p-2 transition-shadow focus:ring-2 focus:outline-none"
 			>
 				{#each algorithms as algo (algo.id)}
@@ -49,43 +52,71 @@
 		<div class="flex flex-col gap-3">
 			<div class="flex justify-between">
 				<label for="size" class="text-sm font-medium">Array Size</label>
-				<span class="text-xs text-gray-500 font-mono">{arraySize} elements</span>
+				<span class="text-xs font-mono text-gray-500">{visualizer.array.length}</span>
 			</div>
 			<input
 				id="size"
 				type="range"
 				min="10"
-				max="100"
-				bind:value={arraySize}
-				class="accent-primary cursor-pointer"
+				max="150"
+				value={visualizer.array.length}
+				oninput={handleSizeChange}
+				disabled={visualizer.isPlaying}
+				class="accent-primary cursor-pointer disabled:opacity-50"
 			/>
 		</div>
 
 		<div class="flex flex-col gap-3">
 			<div class="flex justify-between">
 				<label for="speed" class="text-sm font-medium">Speed</label>
-				<span class="text-xs text-gray-500 font-mono">{speed}x</span>
+				<span class="text-xs font-mono text-gray-500">{visualizer.speed}x</span>
 			</div>
 			<input
 				id="speed"
 				type="range"
 				min="1"
 				max="10"
-				bind:value={speed}
+				bind:value={visualizer.speed}
 				class="accent-primary cursor-pointer"
 			/>
 		</div>
 
 		<div class="mt-auto grid grid-cols-2 gap-3 pt-4">
+			{#if !visualizer.isPlaying && visualizer.stepIndex === 0}
+				<button
+					onclick={handleSort}
+					class="bg-primary hover:bg-primary-dark focus:ring-primary/50 col-span-2 rounded-md py-2.5 font-medium text-white shadow-sm transition-all active:scale-95 focus:ring-2 focus:outline-none"
+				>
+					Start Sorting
+				</button>
+			{:else if visualizer.isPlaying}
+				<button
+					onclick={() => visualizer.pause()}
+					class="bg-vis-compare hover:brightness-90 col-span-2 rounded-md py-2.5 font-medium text-white shadow-sm transition-all active:scale-95"
+				>
+					Pause
+				</button>
+			{:else}
+				<button
+					onclick={() => visualizer.play()}
+					class="bg-primary hover:bg-primary-dark rounded-md py-2.5 font-medium text-white shadow-sm transition-all active:scale-95"
+				>
+					Resume
+				</button>
+				<button
+					onclick={() => visualizer.resetPlayback()}
+					class="bg-surface-200 text-surface-900 hover:bg-surface-300 rounded-md py-2.5 font-medium shadow-sm transition-all active:scale-95"
+				>
+					Reset
+				</button>
+			{/if}
+
 			<button
-				class="bg-primary hover:bg-primary-dark focus:ring-primary/50 rounded-md py-2.5 font-medium text-white shadow-sm transition-all active:scale-95 focus:ring-2 focus:outline-none"
+				onclick={() => visualizer.generateArray(visualizer.array.length)}
+				disabled={visualizer.isPlaying}
+				class="bg-surface-200 hover:bg-surface-300 text-surface-900 focus:ring-surface-300/50 col-span-2 rounded-md py-2.5 font-medium transition-all active:scale-95 focus:ring-2 focus:outline-none disabled:opacity-50"
 			>
-				Sort
-			</button>
-			<button
-				class="bg-surface-200 hover:bg-surface-300 text-surface-900 focus:ring-surface-300/50 rounded-md py-2.5 font-medium transition-all active:scale-95 focus:ring-2 focus:outline-none"
-			>
-				Reset
+				New Array
 			</button>
 		</div>
 	</div>
