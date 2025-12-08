@@ -1,5 +1,5 @@
 <script>
-	import { algorithms } from '$lib/data/algorithms';
+	import { algorithms } from '$lib/algorithms';
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
 	import Latex from '$lib/components/Latex.svelte';

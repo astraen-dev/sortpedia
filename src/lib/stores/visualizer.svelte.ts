@@ -1,4 +1,4 @@
-import type { SortEvent } from '$lib/logic/types';
+import type { SortEvent } from '$lib/algorithms/types';
 import { SvelteSet } from 'svelte/reactivity';
 
 export class VisualizerEngine {

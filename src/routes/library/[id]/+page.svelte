@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { getAlgorithm } from '$lib/data/algorithms';
+	import { getAlgorithm } from '$lib/algorithms';
 	import { resolve } from '$app/paths';
 	import { VisualizerEngine } from '$lib/stores/visualizer.svelte';
 	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';

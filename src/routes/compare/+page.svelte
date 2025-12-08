@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { algorithms, getAlgorithm } from '$lib/data/algorithms';
+	import { algorithms, getAlgorithm } from '$lib/algorithms';
 	import { VisualizerEngine } from '$lib/stores/visualizer.svelte';
 	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';
 	import { onMount } from 'svelte';
