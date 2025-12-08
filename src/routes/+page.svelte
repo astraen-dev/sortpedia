@@ -11,16 +11,16 @@
 		science students and enthusiasts.
 	</p>
 
-	<div class="mt-10 flex gap-4">
+	<div class="mt-10 flex flex-wrap justify-center gap-4">
 		<a
 			href={resolve('/visualizer')}
-			class="bg-primary hover:bg-primary/90 rounded-md px-6 py-3 font-medium text-white shadow-lg shadow-primary/20 transition-colors"
+			class="bg-primary hover:bg-primary-dark rounded-md px-6 py-3 font-medium text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5"
 		>
 			Start Visualizing
 		</a>
 		<a
 			href={resolve('/library')}
-			class="bg-surface-200 hover:bg-surface-300 text-surface-900 rounded-md px-6 py-3 font-medium transition-colors"
+			class="bg-surface-200 hover:bg-surface-300 text-surface-900 rounded-md px-6 py-3 font-medium transition-colors hover:text-black"
 		>
 			Browse Library
 		</a>
@@ -28,12 +28,19 @@
 
 	<!-- Hero Placeholder Animation -->
 	<div
-		class="bg-surface-100 border-surface-200 mt-16 flex h-64 w-full max-w-4xl items-end justify-center gap-1 rounded-xl border p-8 shadow-inner"
+		class="bg-surface-100 border-surface-200 mt-16 flex h-64 w-full max-w-4xl items-end justify-center gap-1 rounded-xl border p-8 shadow-inner overflow-hidden"
 	>
-		{#each Array.from({ length: 20 }, (_, k) => k) as i (i)}
+		{#each Array.from({ length: 24 }, (_, k) => k) as i (i)}
+			{@const startH = Math.max(10, Math.random() * 100) + '%'}
+			{@const endH = Math.max(10, Math.random() * 100) + '%'}
 			<div
-				class="bg-vis-idle w-full rounded-t-sm opacity-60"
-				style="height: {Math.random() * 100}%"
+				class="bg-vis-idle animate-bar w-full rounded-t-sm"
+				style="
+                    --h-start: {startH};
+                    --h-end: {endH};
+                    animation-delay: {Math.random() * 2}s;
+                    height: {startH}
+                "
 			></div>
 		{/each}
 	</div>

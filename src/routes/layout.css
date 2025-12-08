@@ -10,6 +10,7 @@
 	--color-surface-900: #111827;
 
 	--color-primary: #3b82f6;
+	--color-primary-dark: #2563eb;
 	--color-accent: #8b5cf6;
 
 	/* Functional Visualization Colors */
@@ -26,4 +27,37 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	overflow-y: scroll; /* Prevent layout shift during transitions */
+}
+
+/* Custom Range Slider Styling for Cross-Browser Consistency */
+input[type='range'] {
+	-webkit-appearance: none;
+	@apply h-2 w-full rounded-lg bg-surface-200 outline-none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	@apply h-5 w-5 cursor-pointer rounded-full border-2 border-white bg-primary shadow-md transition-transform hover:scale-110;
+}
+
+input[type='range']::-moz-range-thumb {
+	@apply h-5 w-5 cursor-none rounded-full border-2 border-white bg-primary shadow-md transition-transform hover:scale-110;
+}
+
+/* Animation Utilities */
+@keyframes breathe {
+	0%,
+	100% {
+		height: var(--h-start);
+		opacity: 0.6;
+	}
+	50% {
+		height: var(--h-end);
+		opacity: 0.8;
+	}
+}
+
+.animate-bar {
+	animation: breathe 3s ease-in-out infinite;
 }
