@@ -20,8 +20,13 @@
 	let algoId = $derived(page.params.id ?? '');
 	let algorithm = $derived(getAlgorithm(algoId));
 
-	// Bogo Sort is only practical for tiny arrays. Set a specific size for it.
-	const DEMO_SIZE = $derived(algorithm?.id === 'bogo-sort' ? 5 : 20);
+	// Check if the algorithm is considered dangerous by comparing its ID against a predefined list.
+	let isDangerAlgo = $derived(() => {
+		const dangerousAlgorithms = ['bogo-sort', 'bogobogo-sort', 'stooge-sort', 'sleep-sort'];
+		return algorithm ? dangerousAlgorithms.includes(algorithm.id) : false;
+	});
+
+	let DEMO_SIZE = $derived(isDangerAlgo() ? 5 : 20);
 	const demoEngine = new VisualizerEngine(0);
 
 	// Reset demo when algorithm or size changes
