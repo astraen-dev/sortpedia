@@ -46,6 +46,12 @@ export interface AlgorithmInfo {
 // Stats only, does not control visuals
 export type SortEventType = string;
 
+export interface StructuralEvent {
+	type: 'add' | 'remove';
+	index: number;
+	value?: number;
+}
+
 export interface SortEvent {
 	// The type of operation for statistical counting (e.g., 'compare', 'swap')
 	type: SortEventType;
@@ -61,7 +67,10 @@ export interface SortEvent {
 	// Used for Swaps or Overwrites
 	writes?: Record<number, number>;
 
-	// State: Indices to mark as persistently sorted (turn green permanently)
+	// Structural: Array of changes to length/indices
+	structural?: StructuralEvent[];
+
+	// State: Indices to mark as sorted
 	sorted?: number[];
 }
 

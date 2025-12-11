@@ -1,12 +1,18 @@
 import type { SortEvent, SortWorkerResponse } from '$lib/algorithms/types';
 import { SvelteSet } from 'svelte/reactivity';
 
+// Helper to track items uniquely through structural changes
+export interface VisualizerItem {
+	id: string;
+	value: number;
+}
+
 export class VisualizerEngine {
 	// State
-	array = $state<number[]>([]);
+	array = $state<VisualizerItem[]>([]);
 	trace = $state<SortEvent[]>([]);
-	stepIndex = $state(0); // Raw index in the full event trace
-	operationIndex = $state(0); // Counts only "operational" events (filtered by type if needed)
+	stepIndex = $state(0);
+	operationIndex = $state(0);
 	totalOperations = $state(0);
 	isPlaying = $state(false);
 	speed = $state(5); // 1-10
@@ -18,7 +24,8 @@ export class VisualizerEngine {
 
 	private worker: Worker | null = null;
 	private timer: number | null = null;
-	private initialArray: number[] = [];
+	private initialArray: VisualizerItem[] = [];
+	private nextId = 0;
 
 	constructor(defaultSize = 50) {
 		this.generateArray(defaultSize);
@@ -26,25 +33,29 @@ export class VisualizerEngine {
 
 	// Derived state for the text label
 	get currentStepLabel(): string {
-		// When the trace is finished, check the final state of the array.
-		/*if (this.operationIndex >= this.totalOperations && this.totalOperations > 0) {
-			// Use an internal check to see if the array is actually sorted.
-			const isActuallySorted = this._isSortedCheck();
-			return isActuallySorted ? 'Sorted!' : 'Failed to sort (max attempts reached)';
-		}*/
 		return this.currentText;
 	}
 
 	generateArray(size: number) {
 		this.reset();
-		this.array = Array.from({ length: size }, () => Math.floor(Math.random() * 95) + 5);
-		this.initialArray = [...this.array];
+		this.nextId = 0;
+		// Create objects with unique IDs
+		this.array = Array.from({ length: size }, () => ({
+			id: `item-${this.nextId++}`,
+			value: Math.floor(Math.random() * 95) + 5
+		}));
+		// Deep copy for reset
+		this.initialArray = this.array.map((item) => ({ ...item }));
 	}
 
 	setArray(newArray: number[]) {
 		this.reset();
-		this.array = [...newArray];
-		this.initialArray = [...newArray];
+		this.nextId = 0;
+		this.array = newArray.map((val) => ({
+			id: `item-${this.nextId++}`,
+			value: val
+		}));
+		this.initialArray = this.array.map((item) => ({ ...item }));
 	}
 
 	async runAlgorithm(algoId: string) {
@@ -58,16 +69,17 @@ export class VisualizerEngine {
 		this.worker.onmessage = (e: MessageEvent<SortWorkerResponse>) => {
 			const { trace } = e.data;
 			this.trace = trace;
-			// We consider "compare", "swap", "write" as operations.
-			// We can filter out pure "sorted" markers if they don't involve work,
-			// but usually in this new system, every event is a step.
+			// We do not count 'sorted' events as operations
 			this.totalOperations = trace.filter((event) => event.type !== 'sorted').length;
 			this.play();
 		};
 
+		// Send simple number array to worker (it doesn't need to know about IDs)
+		const simpleArray = this.initialArray.map((item) => item.value);
+
 		this.worker.postMessage({
 			algorithm: algoId,
-			array: [...this.initialArray]
+			array: simpleArray
 		});
 	}
 
@@ -93,7 +105,7 @@ export class VisualizerEngine {
 		this.currentText = 'Ready to sort';
 		this.sortedIndices = new SvelteSet();
 		if (this.initialArray.length > 0) {
-			this.array = [...this.initialArray];
+			this.array = this.initialArray.map((item) => ({ ...item }));
 		}
 	}
 
@@ -104,18 +116,19 @@ export class VisualizerEngine {
 		this.activeHighlights = {};
 		this.currentText = 'Ready to sort';
 		this.sortedIndices = new SvelteSet();
-		this.array = [...this.initialArray];
+		this.array = this.initialArray.map((item) => ({ ...item }));
 	}
 
 	stepBack() {
 		this.pause();
 		if (this.stepIndex <= 0) return;
 
-		// Simple implementation: Reset and replay up to stepIndex - 1
+		// Reset and replay up to stepIndex - 1
 		// Optimized approaches exist, but this is robust for N < 200
 		const targetStep = this.stepIndex - 1;
 
-		this.array = [...this.initialArray];
+		// Deep copy to restore initial state
+		this.array = this.initialArray.map((item) => ({ ...item }));
 		this.sortedIndices = new SvelteSet();
 		this.operationIndex = 0;
 
@@ -206,25 +219,35 @@ export class VisualizerEngine {
 	}
 
 	private applyEventData(event: SortEvent) {
-		// Handle writes (swaps, overdubs)
-		if (event.writes) {
-			for (const [indexStr, value] of Object.entries(event.writes)) {
-				const index = parseInt(indexStr);
-				this.array[index] = value;
+		// 1. Handle Structural Changes (Add/Remove)
+		if (event.structural) {
+			for (const change of event.structural) {
+				if (change.type === 'remove') {
+					this.array.splice(change.index, 1);
+				} else if (change.type === 'add' && change.value !== undefined && change.value !== null) {
+					// Create a new unique ID for dynamically added items
+					this.array.splice(change.index, 0, {
+						id: `vis-item-${this.nextId++}`,
+						value: change.value
+					});
+				}
 			}
 		}
 
-		// Handle persistent sorted marking
+		// 2. Handle writes (swaps, overdubs)
+		if (event.writes) {
+			for (const [indexStr, value] of Object.entries(event.writes)) {
+				const index = parseInt(indexStr);
+				if (index >= 0 && index < this.array.length) {
+					this.array[index].value = value;
+				}
+			}
+		}
+
+		// 3. Handle persistent sorted marking
 		if (event.sorted) {
 			event.sorted.forEach((idx) => this.sortedIndices.add(idx));
 		}
-	}
-
-	private _isSortedCheck(): boolean {
-		for (let i = 0; i < this.array.length - 1; i++) {
-			if (this.array[i] > this.array[i + 1]) return false;
-		}
-		return true;
 	}
 
 	getBarColor(index: number) {

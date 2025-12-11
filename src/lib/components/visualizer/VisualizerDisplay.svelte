@@ -17,10 +17,10 @@
 
 	<!-- Bar Container -->
 	<div class="flex h-full w-full items-end gap-px md:gap-0.5">
-		{#each engine.array as value, i (i)}
+		{#each engine.array as item, i (item.id)}
 			<div
 				class="w-full rounded-t-sm transition-colors duration-75 {engine.getBarColor(i)}"
-				style="height: {value}%"
+				style="height: {item.value}%"
 			></div>
 		{/each}
 	</div>
