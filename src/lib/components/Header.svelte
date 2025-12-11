@@ -6,6 +6,7 @@
 	const navItems = [
 		['Visualizer', '/visualizer'],
 		['Compare', '/compare'],
+		['Benchmark', '/benchmark'],
 		['Library', '/library'],
 		['About', '/about']
 	] as const;
