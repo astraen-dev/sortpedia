@@ -74,8 +74,10 @@
 		class="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left"
 	>
 		<div>
-			<h1 class="text-3xl font-bold">Algorithm Race</h1>
-			<p class="text-surface-800 mt-2">Compare performance side-by-side on identical datasets</p>
+			<h1 class="text-3xl font-bold">Algorithm Comparison</h1>
+			<p class="text-surface-800 mt-2">
+				Compare algorithmic efficiency and operation counts side-by-side.
+			</p>
 		</div>
 
 		<!-- Playback Controls -->
@@ -123,8 +125,8 @@
 			<input
 				id="race-size"
 				type="range"
-				min="10"
-				max="100"
+				min="1"
+				max="150"
 				bind:value={sharedSize}
 				oninput={generateSharedArray}
 				disabled={isRunning}
@@ -239,11 +241,7 @@
 				<ul class="space-y-3 text-sm">
 					{#each infoA.details.steps as step, i (i)}
 						<li class="flex gap-3">
-							<span
-								class="bg-primary/10 text-primary flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-							>
-								{i + 1}
-							</span>
+							<div class="bg-primary/40 mt-1.5 h-2 w-2 shrink-0 rounded-full"></div>
 							<div class="text-surface-700">
 								<TextWithLatex text={step} />
 							</div>
@@ -266,11 +264,7 @@
 				<ul class="space-y-3 text-sm">
 					{#each infoB.details.steps as step, i (i)}
 						<li class="flex gap-3">
-							<span
-								class="bg-accent/10 text-accent flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-							>
-								{i + 1}
-							</span>
+							<div class="bg-accent/40 mt-1.5 h-2 w-2 shrink-0 rounded-full"></div>
 							<div class="text-surface-700">
 								<TextWithLatex text={step} />
 							</div>

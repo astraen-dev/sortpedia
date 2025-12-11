@@ -109,8 +109,8 @@
 			<input
 				id="size"
 				type="range"
-				min="10"
-				max="150"
+				min="1"
+				max="200"
 				value={visualizer.targetSize}
 				oninput={handleSizeChange}
 				disabled={visualizer.isPlaying}
@@ -219,12 +219,8 @@
 			<h3 class="text-surface-900 mb-4 text-lg font-bold">How it Works</h3>
 			<ul class="space-y-3">
 				{#each currentAlgo.details.steps as step, i (i)}
-					<li class="flex gap-3 text-sm">
-						<span
-							class="bg-surface-200 text-surface-700 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-						>
-							{i + 1}
-						</span>
+					<li class="flex gap-4">
+						<div class="bg-surface-200 mt-1.5 h-2 w-2 shrink-0 rounded-full"></div>
 						<p class="text-surface-800 leading-relaxed">
 							<TextWithLatex text={step} />
 						</p>

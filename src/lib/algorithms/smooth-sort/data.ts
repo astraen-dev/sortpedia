@@ -37,6 +37,7 @@ export const data: AlgorithmInfo = {
 			'**Constant Factor:** The overhead of calculating Leonardo numbers and managing the bitvector makes it slower than Quicksort on random data.',
 			'**Unstable:** Like all heap-based sorts, it rearranges equal elements arbitrarily.'
 		],
+		// TODO: using typescript not javascript
 		javascript: `type CompareFn<T> = (a: T, b: T) => number;
 
 // Counts trailing zeros of a BigInt.

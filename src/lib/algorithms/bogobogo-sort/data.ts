@@ -33,6 +33,7 @@ export const data: AlgorithmInfo = {
 			'**Unbounded Runtime**: Like Bogo Sort, there is no guaranteed upper limit on its execution time; it may never terminate.',
 			'**High Space Complexity**: The recursive nature of the algorithm, with copies being made at each step, results in $O(n^2)$ space complexity.'
 		],
+		// TODO: using typescript not javascript
 		javascript: `// Uses the Fisher-Yates shuffle algorithm.
 function shuffleRange(data: number[], start: number, end: number): void {
 	// The range is [start, end)
