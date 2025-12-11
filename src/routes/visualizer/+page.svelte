@@ -98,14 +98,20 @@
 		<div class="flex flex-col gap-3">
 			<div class="flex justify-between">
 				<label for="size" class="text-sm font-medium">Array Size</label>
-				<span class="text-xs font-mono text-gray-500">{visualizer.array.length}</span>
+				<span class="text-xs font-mono text-gray-500">
+					{#if visualizer.array.length !== visualizer.targetSize}
+						<span class="text-red-500 font-bold">{visualizer.array.length}</span>
+						<span class="mx-1">/</span>
+					{/if}
+					{visualizer.targetSize}
+				</span>
 			</div>
 			<input
 				id="size"
 				type="range"
 				min="10"
 				max="150"
-				value={visualizer.array.length}
+				value={visualizer.targetSize}
 				oninput={handleSizeChange}
 				disabled={visualizer.isPlaying}
 				class="accent-primary cursor-pointer disabled:opacity-50"
@@ -188,7 +194,7 @@
 			</button>
 
 			<button
-				onclick={() => visualizer.generateArray(visualizer.array.length)}
+				onclick={() => visualizer.generateArray(visualizer.targetSize)}
 				disabled={visualizer.isPlaying}
 				class="bg-surface-200 hover:bg-surface-300 text-surface-900 focus:ring-surface-300/50 flex w-full items-center justify-center gap-2 rounded-md py-2.5 font-medium transition-all active:scale-95 focus:ring-2 focus:outline-none disabled:opacity-50"
 			>

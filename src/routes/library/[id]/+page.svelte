@@ -27,6 +27,7 @@
 	});
 
 	let DEMO_SIZE = $derived(isDangerAlgo() ? 5 : 20);
+	let DEMO_SPEED = 4;
 	const demoEngine = new VisualizerEngine(0);
 
 	// Reset demo when algorithm or size changes
@@ -43,7 +44,7 @@
 
 	function runDemo() {
 		if (algorithm) {
-			demoEngine.speed = 6;
+			demoEngine.speed = DEMO_SPEED;
 			demoEngine.runAlgorithm(algorithm.id);
 		}
 	}
@@ -214,7 +215,7 @@
 					<div class="bg-surface-50 border-surface-200 overflow-hidden rounded-xl border shadow-sm">
 						<div class="border-surface-200 border-b bg-white p-4">
 							<h3 class="font-bold">Live Demo</h3>
-							<p class="text-xs text-gray-500">{DEMO_SIZE} elements • 6x Speed</p>
+							<p class="text-xs text-gray-500">{DEMO_SIZE} elements • {DEMO_SPEED}x Speed</p>
 						</div>
 
 						<div class="bg-surface-100 h-48 p-4">

@@ -10,6 +10,7 @@ export interface VisualizerItem {
 export class VisualizerEngine {
 	// State
 	array = $state<VisualizerItem[]>([]);
+	targetSize = $state(50);
 	trace = $state<SortEvent[]>([]);
 	stepIndex = $state(0);
 	operationIndex = $state(0);
@@ -28,6 +29,7 @@ export class VisualizerEngine {
 	private nextId = 0;
 
 	constructor(defaultSize = 50) {
+		this.targetSize = defaultSize;
 		this.generateArray(defaultSize);
 	}
 
@@ -38,6 +40,7 @@ export class VisualizerEngine {
 
 	generateArray(size: number) {
 		this.reset();
+		this.targetSize = size;
 		this.nextId = 0;
 		// Create objects with unique IDs
 		this.array = Array.from({ length: size }, () => ({
@@ -50,6 +53,7 @@ export class VisualizerEngine {
 
 	setArray(newArray: number[]) {
 		this.reset();
+		this.targetSize = newArray.length;
 		this.nextId = 0;
 		this.array = newArray.map((val) => ({
 			id: `item-${this.nextId++}`,
