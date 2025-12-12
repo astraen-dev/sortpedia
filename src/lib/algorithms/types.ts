@@ -22,6 +22,7 @@ export interface AlgorithmInfo {
 		| 'Parallel'
 		| 'Cache-Efficient'
 		| 'Online'
+		| 'Esoteric'
 	)[];
 	complexity: {
 		best: string;

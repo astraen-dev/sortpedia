@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 	import { Play, Pause, RotateCcw, ChevronRight, ChevronLeft, Shuffle } from 'lucide-svelte';
 
+	// TODO: certain algorithms (like stooge sort) should limit max array size
+
 	// Bind controls to store
 	let selectedAlgo = $state(algorithms[0].id);
 

@@ -42,7 +42,9 @@ export const categoryExplanations = {
 	External: "Designed for sorting data that doesn't fit in memory, using disk or external storage",
 	Parallel: 'Divides the sorting task across multiple processors to improve speed.',
 	'Cache-Efficient': 'Optimized to minimize cache misses and improve memory access patterns.',
-	Online: 'Can sort a list as it receives it, without needing to know the entire list in advance.'
+	Online: 'Can sort a list as it receives it, without needing to know the entire list in advance.',
+	Esoteric:
+		'Algorithms that are more conceptual, humorous, or illustrative of a theoretical point than for practical use.'
 };
 
 export const adaptiveExplanation =

@@ -4,7 +4,7 @@ export const data: AlgorithmInfo = {
 	id: 'thanos-sort',
 	name: 'Thanos Sort',
 	group: 'Specialized',
-	category: ['Probabilistic'], // It relies on chance regarding *which* data survives
+	category: ['Esoteric', 'Probabilistic'],
 	complexity: {
 		best: 'O(n)',
 		average: 'O(n^2)',

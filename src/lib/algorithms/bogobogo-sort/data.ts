@@ -4,7 +4,7 @@ export const data: AlgorithmInfo = {
 	id: 'bogobogo-sort',
 	name: 'Bogobogo Sort',
 	group: 'Comparison-Based',
-	category: ['Brute Force', 'Probabilistic'],
+	category: ['Esoteric', 'Brute Force', 'Probabilistic'],
 	complexity: {
 		best: 'O(n^2)',
 		average: 'O((n!)!)',

@@ -22,7 +22,13 @@
 
 	// Check if the algorithm is considered dangerous by comparing its ID against a predefined list.
 	let isDangerAlgo = $derived(() => {
-		const dangerousAlgorithms = ['bogo-sort', 'bogobogo-sort', 'stooge-sort', 'sleep-sort'];
+		const dangerousAlgorithms = [
+			'bogo-sort',
+			'bogobogo-sort',
+			'stooge-sort',
+			'sleep-sort',
+			'bozo-sort'
+		];
 		return algorithm ? dangerousAlgorithms.includes(algorithm.id) : false;
 	});
 
@@ -214,7 +220,7 @@
 				<div class="sticky top-24 space-y-6">
 					<div class="bg-surface-50 border-surface-200 overflow-hidden rounded-xl border shadow-sm">
 						<div class="border-surface-200 border-b bg-white p-4">
-							<h3 class="font-bold">Live Demo</h3>
+							<h3 class="font-bold">Demo</h3>
 							<p class="text-xs text-gray-500">{DEMO_SIZE} elements • {DEMO_SPEED}x Speed</p>
 						</div>
 

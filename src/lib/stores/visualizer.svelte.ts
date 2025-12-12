@@ -88,7 +88,8 @@ export class VisualizerEngine {
 	}
 
 	play() {
-		if (this.operationIndex >= this.totalOperations) return;
+		if (this.stepIndex >= this.trace.length) return;
+
 		this.isPlaying = true;
 		this.loop();
 	}
