@@ -4,15 +4,29 @@
 	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';
 	import TextWithLatex from '$lib/components/TextWithLatex.svelte';
 	import { onMount } from 'svelte';
-	import { Play, Pause, RotateCcw, ChevronRight, ChevronLeft, Shuffle } from 'lucide-svelte';
-
-	// TODO: certain algorithms (like stooge sort) should limit max array size
+	import {
+		TriangleAlert,
+		ChevronLeft,
+		ChevronRight,
+		Pause,
+		Play,
+		RotateCcw,
+		Shuffle
+	} from 'lucide-svelte';
 
 	// Bind controls to store
 	let selectedAlgo = $state(algorithms[0].id);
 
 	// Derived state for descriptions
 	let currentAlgo = $derived(getAlgorithm(selectedAlgo));
+
+	// Warning Logic
+	let warningMessage = $derived.by(() => {
+		if (currentAlgo?.warningThreshold && visualizer.targetSize > currentAlgo.warningThreshold) {
+			return `Warning: ${currentAlgo.name} is extremely inefficient. Running with ${visualizer.targetSize} elements may freeze your browser or take a very long time. Recommended limit: ${currentAlgo.warningThreshold}.`;
+		}
+		return null;
+	});
 
 	// Effects to sync inputs with store
 	const handleSizeChange = (e: Event) => {
@@ -41,6 +55,15 @@
 		>
 			{visualizer.currentStepLabel}
 		</div>
+
+		{#if warningMessage}
+			<div
+				class="absolute top-16 left-1/2 z-20 flex w-11/12 max-w-lg -translate-x-1/2 items-start gap-3 rounded-md border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-800 shadow-sm"
+			>
+				<TriangleAlert class="h-5 w-5 shrink-0 text-yellow-600" />
+				<p>{warningMessage}</p>
+			</div>
+		{/if}
 
 		<VisualizerDisplay engine={visualizer} />
 	</div>
@@ -156,7 +179,8 @@
 						onclick={handleSort}
 						class="bg-primary hover:bg-primary-dark focus:ring-primary/50 col-span-2 flex items-center justify-center gap-2 rounded-md py-2 font-medium text-white shadow-sm transition-all active:scale-95 focus:ring-2 focus:outline-none"
 					>
-						<Play size={18} /> Start
+						<Play size={18} />
+						Start
 					</button>
 				{:else}
 					<button
@@ -167,9 +191,11 @@
 							: 'bg-primary hover:bg-primary-dark'}"
 					>
 						{#if visualizer.isPlaying}
-							<Pause size={18} /> Pause
+							<Pause size={18} />
+							Pause
 						{:else}
-							<Play size={18} /> Resume
+							<Play size={18} />
+							Resume
 						{/if}
 					</button>
 				{/if}
@@ -192,7 +218,8 @@
 				disabled={visualizer.trace.length === 0}
 				class="bg-surface-200 text-surface-900 hover:bg-surface-300 flex w-full items-center justify-center gap-2 rounded-md py-2.5 font-medium shadow-sm transition-all active:scale-95 disabled:opacity-50"
 			>
-				<RotateCcw size={16} /> Reset
+				<RotateCcw size={16} />
+				Reset
 			</button>
 
 			<button
@@ -200,7 +227,8 @@
 				disabled={visualizer.isPlaying}
 				class="bg-surface-200 hover:bg-surface-300 text-surface-900 focus:ring-surface-300/50 flex w-full items-center justify-center gap-2 rounded-md py-2.5 font-medium transition-all active:scale-95 focus:ring-2 focus:outline-none disabled:opacity-50"
 			>
-				<Shuffle size={16} /> New Array
+				<Shuffle size={16} />
+				New Array
 			</button>
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { benchmarkAlgorithms } from '$lib/algorithms';
-	import { Play, RotateCcw, Timer } from 'lucide-svelte';
+	import { TriangleAlert, Play, RotateCcw, Timer } from 'lucide-svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 
 	// Settings
@@ -71,6 +71,19 @@
 	let maxTime = $derived(
 		Math.max(...Object.values(results).filter((v): v is number => typeof v === 'number'), 0)
 	);
+
+	// Warning for slow algorithms in benchmark mode
+	let warningMessage = $derived.by(() => {
+		const dangerAlgos = [...selectedIds]
+			.map((id) => benchmarkAlgorithms.find((a) => a.id === id))
+			.filter((a) => a && a.warningThreshold && arraySize > a.warningThreshold);
+
+		if (dangerAlgos.length > 0) {
+			const names = dangerAlgos.map((a) => a?.name).join(', ');
+			return `Caution: You are benchmarking ${names} with ${arraySize} elements. These algorithms have exponential complexity and may freeze the browser for an extended period.`;
+		}
+		return null;
+	});
 </script>
 
 <div class="flex flex-col gap-8 pb-12">
@@ -154,6 +167,15 @@
 					/>
 				</div>
 			</div>
+
+			{#if warningMessage}
+				<div
+					class="flex items-start gap-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+				>
+					<TriangleAlert class="h-5 w-5 shrink-0 text-red-600" />
+					<p>{warningMessage}</p>
+				</div>
+			{/if}
 
 			<div class="mt-auto flex gap-4">
 				<button

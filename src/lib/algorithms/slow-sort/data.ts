@@ -14,6 +14,7 @@ export const data: AlgorithmInfo = {
 	stable: false,
 	inPlace: true,
 	adaptive: false,
+	warningThreshold: 25,
 	description:
 		"A humorous and notoriously inefficient sorting algorithm based on the parody principle of 'multiply and surrender'.",
 	details: {

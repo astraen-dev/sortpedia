@@ -14,6 +14,7 @@ export const data: AlgorithmInfo = {
 	stable: false,
 	inPlace: false,
 	adaptive: false,
+	warningThreshold: 40,
 	description:
 		'A highly inefficient recursive sorting algorithm that works by recursively sorting overlapping two-thirds sections of the array.',
 	details: {

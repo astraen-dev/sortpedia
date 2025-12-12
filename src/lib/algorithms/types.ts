@@ -33,6 +33,7 @@ export interface AlgorithmInfo {
 	stable: boolean;
 	adaptive: boolean;
 	inPlace: boolean;
+	warningThreshold?: number;
 	description: string;
 	details: {
 		summary: string;

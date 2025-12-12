@@ -4,7 +4,7 @@
 	import VisualizerDisplay from '$lib/components/visualizer/VisualizerDisplay.svelte';
 	import TextWithLatex from '$lib/components/TextWithLatex.svelte';
 	import { onMount } from 'svelte';
-	import { Pause, Play, RotateCcw, Shuffle } from 'lucide-svelte';
+	import { TriangleAlert, Pause, Play, RotateCcw, Shuffle } from 'lucide-svelte';
 
 	// Independent engines for comparison
 	const engineA = new VisualizerEngine(40);
@@ -64,6 +64,20 @@
 		engineB.resetPlayback();
 	}
 
+	// Warning Logic for Compare Mode
+	let activeWarning = $derived.by(() => {
+		const warnA = infoA?.warningThreshold && sharedSize > infoA.warningThreshold;
+		const warnB = infoB?.warningThreshold && sharedSize > infoB.warningThreshold;
+
+		if (warnA || warnB) {
+			const names = [];
+			if (warnA) names.push(infoA?.name);
+			if (warnB) names.push(infoB?.name);
+			return `High Latency Warning: ${names.join(' and ')} ${names.length > 1 ? 'are' : 'is'} not designed for ${sharedSize} elements. Expect significant delays.`;
+		}
+		return null;
+	});
+
 	onMount(() => {
 		generateSharedArray();
 	});
@@ -117,6 +131,15 @@
 			</button>
 		</div>
 	</div>
+
+	{#if activeWarning}
+		<div
+			class="flex items-center gap-3 rounded-md border border-yellow-200 bg-yellow-50 p-4 text-yellow-800"
+		>
+			<TriangleAlert class="h-5 w-5 shrink-0 text-yellow-600" />
+			<span class="text-sm font-medium">{activeWarning}</span>
+		</div>
+	{/if}
 
 	<!-- Configuration Row -->
 	<div class="bg-surface-50 border-surface-200 grid gap-6 rounded-xl border p-4 sm:grid-cols-2">
