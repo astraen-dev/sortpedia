@@ -2,7 +2,6 @@
 	import './layout.css';
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
-	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/state';
@@ -15,7 +14,6 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
 	<title>SortPedia - Learn Algorithms Visually</title>
 </svelte:head>
 

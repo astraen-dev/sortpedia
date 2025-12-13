@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import {
-		getAlgorithm,
-		categoryExplanations,
 		adaptiveExplanation,
+		categoryExplanations,
+		getAlgorithm,
 		inPlaceExplanation,
 		stableExplanation,
 		unstableExplanation
@@ -15,10 +15,36 @@
 	import Latex from '$lib/components/Latex.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import TextWithLatex from '$lib/components/TextWithLatex.svelte';
-	import { Play, Pause, RotateCcw, Shuffle } from 'lucide-svelte';
+	import { Pause, Play, RotateCcw, Shuffle } from 'lucide-svelte';
 
 	let algoId = $derived(page.params.id ?? '');
 	let algorithm = $derived(getAlgorithm(algoId));
+
+	let schemaJson = $derived(
+		JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'TechArticle',
+			headline: algorithm ? `${algorithm.name} Algorithm Explained` : 'Sorting Algorithm',
+			description: algorithm
+				? algorithm.details.summary
+				: 'Detailed explanation of a sorting algorithm.',
+			articleSection: 'Computer Science',
+			keywords: algorithm
+				? `${algorithm.name}, sorting algorithm, ${algorithm.complexity.average} complexity`
+				: 'sorting',
+			author: {
+				'@type': 'Organization',
+				name: 'SortPedia'
+			},
+			about: {
+				'@type': 'Thing',
+				name: algorithm?.name,
+				description: algorithm?.details.summary
+			}
+		})
+	);
+
+	let jsonLdScript = $derived(`<script type="application/ld+json">${schemaJson}<` + `/script>`);
 
 	// Check if the algorithm is considered dangerous by comparing its ID against a predefined list.
 	let isDangerAlgo = $derived(() => {
@@ -52,6 +78,10 @@
 
 <svelte:head>
 	<title>{algorithm ? algorithm.name : 'Algorithm Not Found'} - SortPedia</title>
+	<link rel="canonical" href={`https://sortpedia.com/library/${algoId}`} />
+
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html jsonLdScript}
 </svelte:head>
 
 {#if algorithm}
@@ -284,7 +314,9 @@
 						{#each algorithm.details.steps as step (step)}
 							<li class="flex gap-4">
 								<div class="bg-surface-200 mt-1.5 h-2 w-2 shrink-0 rounded-full"></div>
-								<p class="text-surface-800 leading-relaxed"><TextWithLatex text={step} /></p>
+								<p class="text-surface-800 leading-relaxed">
+									<TextWithLatex text={step} />
+								</p>
 							</li>
 						{/each}
 					</ul>
@@ -339,8 +371,10 @@
 								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg
 							>
+								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+								<path d="m9 11 3 3L22 4" />
+							</svg>
 							Advantages
 						</h3>
 						<ul class="text-surface-800 space-y-3 text-sm">
@@ -363,13 +397,11 @@
 								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line
-									x1="9"
-									y1="9"
-									x2="15"
-									y2="15"
-								/></svg
 							>
+								<circle cx="12" cy="12" r="10" />
+								<line x1="15" y1="9" x2="9" y2="15" />
+								<line x1="9" y1="9" x2="15" y2="15" />
+							</svg>
 							Disadvantages
 						</h3>
 						<ul class="text-surface-800 space-y-3 text-sm">
