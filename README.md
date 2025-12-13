@@ -7,8 +7,8 @@
 **SortPedia** is a modern, interactive encyclopedia of sorting algorithms. It bridges the gap between abstract computer
 science theory and intuitive visual understanding.
 
-From industry standards like **Quick Sort** and **Merge Sort** to chaotic esoteric algorithms like **Thanos Sort** and \*
-\*Quantum Bogo Sort\*\*, SortPedia lets you watch, race, and benchmark them all.
+From industry standards like **Quick Sort** and **Merge Sort** to chaotic esoteric algorithms like **Thanos Sort** and
+**Quantum Bogo Sort**, SortPedia lets you watch, race, and benchmark them all.
 
 ## Features
 
