@@ -66,8 +66,8 @@ export const data: AlgorithmInfo = {
   return arr;
 }`,
 		funFacts: [
-			'In a 2007 interview, former Google CEO Eric Schmidt asked then-candidate <strong>Barack Obama</strong> how to sort a million integers. Obama famously replied, "I think the bubble sort would be the wrong way to go."',
-			'The issue of "turtles" (small values near the end) led to the invention of <strong>Cocktail Shaker Sort</strong>, which sorts in both directions to solve the problem.',
+			'In a 2007 interview, former Google CEO Eric Schmidt asked then-candidate **Barack Obama** how to sort a million integers. Obama famously replied, "I think the bubble sort would be the wrong way to go."',
+			'The issue of "turtles" (small values near the end) led to the invention of **Cocktail Shaker Sort**, which sorts in both directions to solve the problem.',
 			'It was originally described in 1956 as a "sorting exchange algorithm" before Kenneth E. Iverson later coined the name "Bubble Sort".'
 		]
 	}
